@@ -1,0 +1,34 @@
+
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+#container {
+	font-family: monospace;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+}
+
+button {
+	cursor: pointer;
+}
+
+object {
+	width: 100%;
+	height: calc(100% - 44px);
+}
+
+.compareWrapper {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	height: 100%;
+}
+
+.player {
+	width: 100%;
+}
