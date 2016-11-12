@@ -15,8 +15,48 @@
 					wins: 0,
 					pairings: []
 				},
+				regexSpecialCharaters = ['^','$','.','?','|','-','[',
+					']','\\','*','+',':','{','}',',','!','(',')','/'
+				].reduce((obj, value) =>
+					Object.defineProperty(obj, value, {value: `\\${value}`})
+				, {}),
+				htmlEncodeMap = {
+					'&': '&amp;',
+					'<': '&lt;',
+					'>': '&gt;',
+					'"': '&quot;',
+					"'": '&#39;',
+					'`': '&#x60;',
+					' ': '&nbsp;',
+					'!': '&#33;',
+					'@': '&#64;',
+					'$': '&#36;',
+					'%': '&#37;',
+					'(': '&#40;',
+					')': '&#41;',
+					'=': '&#x3D;',
+					'+': '&#43;',
+					'{': '&#123;',
+					'}': '&#125;',
+					'[': '&#91;',
+					']': '&#93;',
+					'/': '&#x2F;'
+				},
+				htmlEncodeRegex = new RegExp(
+					`[${Object.keys(htmlEncodeMap).map((key) =>
+						`${regexSpecialCharaters[key] || key}`)
+						.join('')}]`,
+				'g'),
+				escapeHtml = (string) =>
+					String(string).replace(htmlEncodeRegex, (value) =>
+						htmlEncodeMap[value]),
+				htmlTemplateHandler = (strings, ...values) =>
+					values.map((value, index) =>
+							`${strings.raw[index]}${escapeHtml(value)}`)
+						.concat(strings.raw[strings.length -1])
+						.join(''),
 				playerInformationTemplate = (player) =>
-					`<div class="player">
+					htmlTemplateHandler`<div class="player">
 						<div>
 							${player.name}
 						</div>
@@ -26,7 +66,7 @@
 						</button>
 					</div>`,
 				playerStandingTemplate = (player) =>
-					`${player.name} (${player.wins}-${player.losses})`,
+					htmlTemplateHandler`${player.name} (${player.wins}-${player.losses})`,
 				pairingTemplate = (pair) =>
 					pair[1] !== BYE ? 
 						`<div>
