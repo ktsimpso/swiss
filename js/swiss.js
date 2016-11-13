@@ -18,35 +18,23 @@
 				regexSpecialCharaters = ['^','$','.','?','|','-','[',
 					']','\\','*','+',':','{','}',',','!','(',')','/'
 				].reduce((obj, value) =>
-					Object.defineProperty(obj, value, {value: `\\${value}`})
+					Object.defineProperty(obj, value, {
+						value: `\\${value}`,
+						enumerable: true
+					})
 				, {}),
-				htmlEncodeMap = {
-					'&': '&amp;',
-					'<': '&lt;',
-					'>': '&gt;',
-					'"': '&quot;',
-					"'": '&#39;',
-					'`': '&#x60;',
-					' ': '&nbsp;',
-					'!': '&#33;',
-					'@': '&#64;',
-					'$': '&#36;',
-					'%': '&#37;',
-					'(': '&#40;',
-					')': '&#41;',
-					'=': '&#x3D;',
-					'+': '&#43;',
-					'{': '&#123;',
-					'}': '&#125;',
-					'[': '&#91;',
-					']': '&#93;',
-					'/': '&#x2F;'
-				},
+				htmlEncodeMap = ['&','<','>','"',"'",'`',' ','!','@',
+					'$','%','(',')','=','+','{','}','[',']','/']
+					.reduce((obj, value) =>
+						Object.defineProperty(obj, value, {
+							value: `&#${value.charCodeAt()};`,
+							enumerable: true
+						})
+					, {}),
 				htmlEncodeRegex = new RegExp(
 					`[${Object.keys(htmlEncodeMap).map((key) =>
 						`${regexSpecialCharaters[key] || key}`)
-						.join('')}]`,
-				'g'),
+						.join('')}]`, 'g'),
 				escapeHtml = (string) =>
 					String(string).replace(htmlEncodeRegex, (value) =>
 						htmlEncodeMap[value]),
@@ -211,7 +199,7 @@
 						.reduce((chain, round) =>
 							chain.then((players) => runRound(players, round)),
 							Promise.resolve(players));
-				
+
 			runTournament(players)
 				.then((players) => renderStandings(players, true));
 		});
