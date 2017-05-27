@@ -15,7 +15,7 @@
 					wins: 0,
 					pairings: []
 				},
-				regexSpecialCharaters = ['^','$','.','?','|','-','[',
+				regexSpecialCharacters = ['^','$','.','?','|','-','[',
 					']','\\','*','+',':','{','}',',','!','(',')','/'
 				].reduce((obj, value) =>
 					Object.defineProperty(obj, value, {
@@ -33,7 +33,7 @@
 					, {}),
 				htmlEncodeRegex = new RegExp(
 					`[${Object.keys(htmlEncodeMap).map((key) =>
-						`${regexSpecialCharaters[key] || key}`)
+						`${regexSpecialCharacters[key] || key}`)
 						.join('')}]`, 'g'),
 				escapeHtml = (string) =>
 					String(string).replace(htmlEncodeRegex, (value) =>
