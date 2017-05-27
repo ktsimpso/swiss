@@ -48,7 +48,7 @@
 						<div>
 							${player.name}
 						</div>
-						<object type="application/pdf" data=/${player.link}></object>
+						<object type="${player.type}" data="${player.link}"></object>
 						<button>
 							${player.name} wins
 						</button>
